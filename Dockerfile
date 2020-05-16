@@ -8,11 +8,9 @@ RUN apk add zlib-dev --no-cache
 
 RUN gem install rdoc
 RUN gem install etc
-RUN gem install thin
+RUN gem install puma
 RUN gem install org-ruby  # optional
 RUN gem install gollum
-RUN gem uninstall eventmachine --force
-RUN gem install eventmachine --platform ruby
 
 RUN apk del ruby-dev
 RUN apk del cmake
