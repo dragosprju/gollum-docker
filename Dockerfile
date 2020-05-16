@@ -1,10 +1,10 @@
 FROM alpine
-RUN apk add ruby
-RUN apk add ruby-dev
-RUN apk add build-base
-RUN apk add cmake
-RUN apk add openssl-dev
-RUN apk add zlib-dev
+RUN apk add ruby --no-cache
+RUN apk add ruby-dev --no-cache
+RUN apk add build-base --no-cache
+RUN apk add cmake --no-cache
+RUN apk add openssl-dev --no-cache
+RUN apk add zlib-dev --no-cache
 
 RUN gem install rdoc
 RUN gem install etc
