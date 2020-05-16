@@ -8,7 +8,8 @@ RUN apk add zlib-dev --no-cache
 
 RUN gem install rdoc
 RUN gem install etc
-RUN gem install puma
+RUN gem install thin
+RUN gem install eventmachine --platform ruby
 RUN gem install org-ruby  # optional
 RUN gem install gollum
 
