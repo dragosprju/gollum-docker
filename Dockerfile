@@ -11,7 +11,6 @@ RUN gem install etc
 RUN gem install thin
 RUN gem install org-ruby  # optional
 RUN gem install gollum
-RUN gem install thin
 
 RUN apk del ruby-dev
 RUN apk del cmake
