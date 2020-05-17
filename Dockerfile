@@ -13,13 +13,17 @@ RUN gem install thin
 RUN gem install org-ruby  # optional
 RUN gem install gollum
 
-RUN apk del ruby-dev
+# Don't remove ruby-dev, gives out errors
+# RUN apk del ruby-dev 
 RUN apk del cmake
 RUN apk del build-base
 RUN apk del openssl-dev
 RUN apk del zlib-dev
 
-WORKDIR /gollum/wiki
-ENTRYPOINT ["sh"]
+ENV GOLLUM_PARAMS='--allow-uploads'
+
+# WORKDIR /gollum/wiki
+COPY startup.sh
+ENTRYPOINT ["/startup.sh"]
 
 EXPOSE 4567
