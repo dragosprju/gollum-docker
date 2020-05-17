@@ -20,6 +20,6 @@ RUN apk del openssl-dev
 RUN apk del zlib-dev
 
 WORKDIR /gollum/wiki
-ENTRYPOINT ["gollum"]
+ENTRYPOINT ["sh"]
 
 EXPOSE 4567
