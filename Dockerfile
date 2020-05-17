@@ -10,7 +10,7 @@ RUN apk add build-base --no-cache
 RUN apk add cmake --no-cache
 RUN apk add openssl-dev --no-cache
 RUN apk add zlib-dev --no-cache
-RUN apk add wget --no-cache
+RUN apk add curl --no-cache
 
 # Install gollum and its runtime requirements
 
@@ -28,7 +28,7 @@ RUN mkdir /app/caddy
 RUN mkdir /app/caddy/home
 WORKDIR /app/caddy
 RUN curl -OL "https://github.com/caddyserver/caddy/releases/download/v2.0.0/$CADDY_FILE_TO_DOWNLOAD" 
-RUN tar -zxvf /app/caddy
+RUN tar -zxvf /app/caddy/$CADDY_FILE_TO_DOWNLOAD
 RUN rm $CADDY_FILE_TO_DOWNLOAD
 RUN ln -s /app/caddy /usr/bin/caddy
 
@@ -40,7 +40,7 @@ RUN apk del cmake
 RUN apk del build-base
 RUN apk del openssl-dev
 RUN apk del zlib-dev
-RUN apk del wget
+RUN apk del curl
 
 ENV GOLLUM_PARAMS='--allow-uploads'
 
