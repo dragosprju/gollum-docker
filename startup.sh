@@ -12,7 +12,7 @@ echo "Starting Gollum Galore $(cat /app/version)"
 (git init /gollum/wiki)&
 # Set ENV only for caddy process. Makes it read the Caddyfile and store its other files in /app
 echo "Starting Caddy with pararms \"${CADDY_PARAMS}\""
-(HOME=/app caddy ${CADDY_PARAMS})&
+(HOME=/app/caddy/home caddy ${CADDY_PARAMS})&
 echo "Starting Gollum with pararms \"${GOLLUM_PARAMS}\""
 # Start gollum in the foreground
 exec gollum /gollum/wiki ${GOLLUM_PARAMS}
