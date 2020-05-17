@@ -1,6 +1,6 @@
 FROM alpine
 
-ENV CADDY_FILE_TO_DOWNLOAD="caddy_2.0.0_linux_amd64.tar.gz"
+ARG CADDY_VERSION="1.0.4"
 
 # Install packages required for building
 
@@ -27,10 +27,10 @@ RUN mkdir /app
 RUN mkdir /app/caddy
 RUN mkdir /app/caddy/home
 WORKDIR /app/caddy
-RUN curl -OL "https://github.com/caddyserver/caddy/releases/download/v2.0.0/$CADDY_FILE_TO_DOWNLOAD" 
-RUN tar -zxvf /app/caddy/$CADDY_FILE_TO_DOWNLOAD
-RUN rm $CADDY_FILE_TO_DOWNLOAD
-RUN ln -s /app/caddy /usr/bin/caddy
+RUN curl -OL "https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_" $CADDY_VERSION "_linux_amd64.tar.gz" 
+RUN tar -zxvf "/app/caddy/caddy_" $CADDY_VERSION "_linux_amd64.tar.gz"
+RUN rm "caddy_" $CADDY_VERSION "_linux_amd64.tar.gz"
+RUN ln -s /app/caddy/caddy /usr/bin/caddy
 
 # Uninstall all packages used for building
 
@@ -42,11 +42,17 @@ RUN apk del openssl-dev
 RUN apk del zlib-dev
 RUN apk del curl
 
-ENV GOLLUM_PARAMS='--allow-uploads'
-
-# WORKDIR /gollum/wiki
 COPY Caddyfile /app/Caddyfile
-COPY startup.sh /startup.sh
+COPY startup.sh /app/startup.sh
+
+RUN chmod +x /app/caddy/caddy
+RUN chmod +x /usr/bin/caddy
+RUN chmod +x /app/startup.sh
+
+ENV GOLLUM_PARAMS=''
+ENV CADDY_PARAMS=''
+
+WORKDIR /app
 ENTRYPOINT ["sh"]
 
 EXPOSE 80
