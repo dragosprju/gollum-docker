@@ -23,6 +23,7 @@ RUN gem install gollum
 
 # Download caddy and install it
 
+RUN mkdir /app
 RUN mkdir /app/caddy
 RUN mkdir /app/caddy/home
 WORKDIR /app/caddy
