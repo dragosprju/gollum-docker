@@ -14,6 +14,7 @@ RUN apk add curl --no-cache
 RUN apk add tar --no-cache
 RUN apk add gzip --no-cache
 RUN apk add git --no-cache
+RUN apk add sed --no-cache
 
 # Install gollum and its runtime requirements
 
@@ -55,6 +56,10 @@ COPY config.rb /app/config.rb
 RUN chmod +x /app/caddy/caddy
 RUN chmod +x /usr/bin/caddy
 RUN chmod +x /app/startup.sh
+
+RUN sed -i 's/\r$//' /app/startup.sh
+
+RUN apk del sed
 
 ENV GOLLUM_PARAMS=''
 ENV CADDY_PARAMS=''

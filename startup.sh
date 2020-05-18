@@ -4,7 +4,7 @@
 
 #set -o errexit -o nounset -o pipefail
 
-GOLLUM_PARAMS=${GOLLUM_PARAMS:-"--config /app/config.rb"}
+#GOLLUM_PARAMS=${GOLLUM_PARAMS:-"--config /app/config.rb"}
 
 echo "Starting Gollum"
 
