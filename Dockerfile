@@ -62,7 +62,7 @@ RUN sed -i 's/\r$//' /app/startup.sh
 RUN apk del sed
 
 ENV GOLLUM_PARAMS=''
-ENV CADDY_PARAMS=''
+ENV CADDY_PARAMS='-conf /app/Caddyfile'
 
 WORKDIR /app
 ENTRYPOINT ["sh"]
