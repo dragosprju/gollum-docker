@@ -51,7 +51,7 @@ RUN apk del gzip
 
 COPY Caddyfile /app/Caddyfile
 COPY startup.sh /app/startup.sh
-COPY config.rb /app/config.rb
+# COPY config.rb /app/config.rb
 
 RUN chmod +x /app/caddy/caddy
 RUN chmod +x /usr/bin/caddy
