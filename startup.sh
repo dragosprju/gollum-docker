@@ -2,7 +2,7 @@
 
 # Script taken from https://github.com/schnatterer
 
-set -o errexit -o nounset -o pipefail
+#set -o errexit -o nounset -o pipefail
 
 GOLLUM_PARAMS=${GOLLUM_PARAMS:-"--config /app/config.rb"}
 
