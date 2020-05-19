@@ -63,9 +63,10 @@ RUN apk del sed
 
 ENV GOLLUM_PARAMS=''
 ENV CADDY_PARAMS='-conf /app/Caddyfile'
+ENV HOST=':80'
 
 WORKDIR /app
-ENTRYPOINT ["sh"]
+ENTRYPOINT ["/app/startup.sh"]
 
 EXPOSE 80
 EXPOSE 443
