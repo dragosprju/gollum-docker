@@ -4,7 +4,7 @@ Using Docker to properly instantiate a working instance of the popular [Gollum w
 
 Gollum is usually used as an integrated version in GitHub and Gitea wikis.
 
-Inspired by [schnatter/gollum-galore](https://hub.docker.com/r/schnatterer/gollum-galore/), rewriting it to work with the latest Gollum and using [caddy server](https://caddyserver.com/features).
+Inspired by [schnatter/gollum-galore](https://hub.docker.com/r/schnatterer/gollum-docker/), rewriting it to work with the latest Gollum and using [caddy server](https://caddyserver.com/features).
 
 # Table of contents
 <!-- Update with `doctoc --notitle README.md`. See https://github.com/thlorenz/doctoc -->
@@ -31,19 +31,18 @@ Inspired by [schnatter/gollum-galore](https://hub.docker.com/r/schnatterer/gollu
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
 # Getting to it
 
 ## Super simple setup
 
-`docker run  -p 8080:80 schnatterer/gollum-galore`
+`docker run  -p 8080:80 dragosprju/gollum-docker`
 
 * Serves gollum at `http://localhost:8080`,
 * The wiki data is stored in an anonymous volume.
 
 ## Basic Auth
 
-`docker run -p80:80 -e GOLLUM_PARAMS="--allow-uploads --live-preview" -e CADDY_PARAMS="-conf /gollum/config/Caddyfile" -v ~/gollum:/gollum schnatterer/gollum-galore`
+`docker run -p80:80 -e GOLLUM_PARAMS="--allow-uploads --live-preview" -e CADDY_PARAMS="-conf /gollum/config/Caddyfile" -v ~/gollum:/gollum dragosprju/gollum-docker`
 
 Combined with the following file on your host at `~/gollum/Caddyfile`
 ```
@@ -90,7 +89,7 @@ See https://github.com/BTBurke/caddy-jwt/issues/42
 
 The following makes Caddy challenge a certificate at letsencrypt.
 
-`docker run -p80:80 -e 443:443 -e HOST=yourdomain.com -e CADDY_PARAMS=" -agree -email=you@yourdomain.com" -v ~/gollum:/gollum gollum-galore`
+`docker run -p80:80 -e 443:443 -e HOST=yourdomain.com -e CADDY_PARAMS=" -agree -email=you@yourdomain.com" -v ~/gollum:/gollum gollum-docker`
 
 This will of course only work if this is bound to yourdomain.com:80 and yourdomain:443.
 
@@ -132,49 +131,12 @@ By default, [PlantUML](http://plantuml.com/) Syntax (in between `@startuml` and 
 If you want to disable this completely, just set env var `GOLLUM_PARAMS` without `--config /app/config.rb` (for example
 to an empty value).
 
-# Running on Kubernetes (Openshift)
-
-## Simple setup
-
-You can run gollum-gallore easily on any Kubernetes cluster. It even runs on the [free starter plan of openshift v3](https://www.openshift.com/pricing/index.html).
-
-You can find all necessary descriptors in [`openshift-descriptors-http.yaml`](openshift-descriptors-http.yaml). Most of them are standard kubernetes except for the route, which will work only on openshift.
-It also shows how to specify gollum params and activates basic auth for user `harry` and the password`sally` via a base64-encoded secret.
-
-If you want to deploy it, all you got to do is
-```
-oc new-project gollum-galore
-kubectl apply -f openshift-descriptors-http.yaml
-```
-
-You can query the URL of your route like so: ` oc get route gollum-galore-generated`.
-
-As soon as your pod is ready your gollum wiki will be served at this location.
-
-Note: This is HTTP only! If you're happy with the generated to domain, you can change the route to be `edge`. If you would like to use a custom domain, see bellow.
-
-Sidenote: There also is a [(discontinued) first version of an openshift template](https://github.com/schnatterer/gollum-galore/blob/59cae8ca93d127bed8efbe22d04c6b32860400dd/openshift-template.yaml).
-
-## HTTPS (Custom Domain)
-
-Unfortunately, no luck getting Letsencrypt running on openshift. There justed to be workarounds (see git history of this file) but Openshift seems to have ended their "grace period during the initial launch of Starter" (see [here](https://www.queryxchange.com/q/27_47104454/openshift-online-v3-adding-new-route-gives-forbidden-error/)) plan, where they did not enforce that you cannot specify domain names with the starter plan.
-
-## Credentials
-
-* For Basic Auth see [`openshift-descriptors-http.yaml`](openshift-descriptors-http.yaml)
-* For JWT see [`openshift-descriptors-https-self-signed.yaml`](openshift-descriptors-https-self-signed.yaml)
-
 # Architecture decisions
 
 ## Why Caddy?
 * Almost no configuration necessary
 * Works as transparent proxy
 * Provides HTTS/Letsencrypt out of the box
-
-Evaluated Alternatives
-* Traefik: Easy config, also for Letsencrypt, but didn't work as transparent proxy. Gollums 302 redirects lead to forward to port 4567 in browser, which is not exposed by container (by design!) See [Traefik proof of concept](https://github.com/schnatterer/gollum-galore/tree/traefik)
-* NGINX: Worked as transparent proxy but letsencrypt required installing a seperate cron proxy. Lots of effort and larger docker image. See [NGINX proof of concept](https://github.com/schnatterer/gollum-galore/tree/nginx)
-
 
 ## Why two processes in one Container?
 * Gollum wiki is not indended to handle features such as HTTPS and auth -> We need a reverse proxy for that.
@@ -186,5 +148,5 @@ Evaluated Alternatives
 
 Build local image and run container. Mount local folder `gollum` into the container. There, create a `Caddyfile` as shown in the examples above.
 
-* `docker build -f Dockerfile -t gollum-galore:latest .`
-* `docker run -p80:80  --name gg --rm  -e CADDY_PARAMS="-conf /gollum/config/Caddyfile" -v gollum:/gollum gollum-galore`
+* `docker build -f Dockerfile -t gollum-docker:latest .`
+* `docker run -p80:80  --name gg --rm  -e CADDY_PARAMS="-conf /gollum/config/Caddyfile" -v gollum:/gollum gollum-docker`
